@@ -148,6 +148,50 @@ picarts:
 
 Single file extension under `~/.pi/agent/extensions/` for global availability. No npm dependencies — uses `node:child_process`, `node:net`, `node:fs`, `node:path` only.
 
+## Startup notification
+
+After all sidecarts have been spawned and health-checked (or timed out), picarts sends a summary notification to the pi UI. This ensures the user always knows what happened at startup.
+
+### Success
+
+```
+ctx.ui.notify("picarts: 2 carts started", "info")
+```
+
+Footer status for each cart shows `● {name}`.
+
+### Partial failure
+
+If some carts fail to start or fail their health check:
+
+```
+ctx.ui.notify("picarts: 1 of 2 carts started, 1 failed", "warning")
+```
+
+Failed carts show `✗ {name} (timeout)` or `✗ {name} (exit {code})` in the footer.
+
+### All failed
+
+```
+ctx.ui.notify("picarts: 0 carts started, 2 failed", "error")
+```
+
+### Log location in notifications
+
+When a cart fails, the notification includes the log file path so the user can inspect it:
+
+```
+ctx.ui.notify("picarts: api-portforward failed (timeout). Logs: .pi/picarts/api-portforward.log", "warning")
+```
+
+The `/picarts list` output also shows log paths:
+
+```
+picarts:
+  ✗ redis  (exit 1)  → .pi/picarts/redis.log
+  ● api    (healthy) → .pi/picarts/api.log
+```
+
 ## Out of scope (v1)
 
 - Global sidecarts (`~/.pi/agent/picarts.json`)
