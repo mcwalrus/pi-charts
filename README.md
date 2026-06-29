@@ -1,4 +1,6 @@
-# picarts
+# Pi-Carts
+
+![Picarts Logo](banner.png)
 
 A [pi.dev](https://pi.dev) harness extension that runs sidecart processes on session startup — `kubectl port-forward`, `redis-server`, or any shell command — and tears them down cleanly on shutdown.
 
@@ -42,6 +44,7 @@ Create `.pi/picarts.json` in your project root:
 ## What happens
 
 On `session_start`:
+
 1. Reads `.pi/picarts.json`
 2. Spawns each cart via your shell (`$SHELL`)
 3. Pipes output to `.pi/picarts/{name}.log`
@@ -50,6 +53,7 @@ On `session_start`:
 6. Notifies you: `picarts: 2 carts started` or `picarts: 1 of 2 carts started, 1 failed`
 
 On `session_shutdown`:
+
 1. Sends SIGTERM to all carts
 2. Waits 5s, then SIGKILL if still alive
 3. Clears footer status
@@ -79,3 +83,4 @@ Per-cart logs at `.pi/picarts/{name}.log`, truncated on each start. View with `/
 
 - [Specification](docs/SPECIFICATION.md)
 - [Design considerations](docs/CONSIDERATIONS.md)
+
